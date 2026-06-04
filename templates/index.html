@@ -6,321 +6,473 @@
     <title>韩语素材库 · 智能作文生成器</title>
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            margin: 0;
-            padding: 20px;
-            color: #2c3e50;
+            font-family: 'Segoe UI', 'Noto Sans', system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            color: #1e2a3a;
         }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+
+        /* 整体布局 */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
         }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 10px;
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.1);
         }
-        .sub {
-            text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 30px;
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
         }
+
+        .sidebar-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 6px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 16px;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #e0e7ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link i {
+            width: 24px;
+            font-style: normal;
+            font-weight: normal;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 右侧主内容区 */
+        .main-content {
+            flex: 1;
+            padding: 24px 32px;
+            overflow-y: auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
         /* 卡片样式 */
         .card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 20px 25px;
-            margin-bottom: 25px;
-            transition: 0.2s;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 20px 28px;
+            margin-bottom: 28px;
         }
-        .card h2 {
-            margin-top: 0;
-            border-left: 5px solid #3498db;
-            padding-left: 15px;
+
+        .card-title {
             font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-left: 5px solid #2a5298;
+            padding-left: 16px;
         }
-        .card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.2rem;
-            color: #2c3e50;
-        }
-        .flex-row {
+
+        /* 表单 & 按钮 */
+        .form-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 16px;
         }
+
         .form-group {
             flex: 1;
-            min-width: 150px;
+            min-width: 160px;
         }
+
         label {
             display: block;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-size: 0.85rem;
-            color: #555;
-        }
-        input, select, textarea, button {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
-        }
-        button {
-            background: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        button:hover {
-            background: #2980b9;
-        }
-        button.secondary {
-            background: #95a5a6;
-        }
-        button.secondary:hover {
-            background: #7f8c8d;
-        }
-        button.warning {
-            background: #e67e22;
-        }
-        button.warning:hover {
-            background: #d35400;
-        }
-        .result-area {
-            background: #fef9e6;
-            border-left: 4px solid #f1c40f;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 15px;
-            white-space: pre-wrap;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        .tag {
-            display: inline-block;
-            background: #ecf0f1;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
-            gap: 12px;
-            margin-top: 15px;
-        }
-        .stat-card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: bold;
             color: #2c3e50;
         }
-        .table-responsive {
-            overflow-x: auto;
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: 0.2s;
         }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42,82,152,0.2);
+        }
+
+        button {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1e3c72;
+        }
+
+        button.secondary {
+            background: #64748b;
+        }
+
+        button.secondary:hover {
+            background: #475569;
+        }
+
+        button.danger {
+            background: #dc2626;
+        }
+
+        button.danger:hover {
+            background: #b91c1c;
+        }
+
+        /* 表格 */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         th, td {
-            padding: 10px;
+            padding: 12px 10px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #e2e8f0;
         }
+
         th {
-            background: #f8f9fa;
+            background: #f8fafc;
+            font-weight: 600;
         }
-        .mode-switch {
+
+        /* 统计卡片网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1e3c72;
+        }
+
+        .category-grid {
             display: flex;
-            gap: 15px;
-            align-items: center;
-            margin: 10px 0;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 16px;
         }
-        .mode-switch label {
+
+        .category-card {
+            background: #f1f5f9;
+            border-radius: 40px;
+            padding: 10px 20px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-count {
+            background: #2a5298;
+            color: white;
+            border-radius: 30px;
+            padding: 2px 10px;
+            font-size: 0.8rem;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            max-width: 600px;
+            width: 90%;
+            padding: 24px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
             display: flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: normal;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
         }
-        hr {
-            margin: 20px 0;
+
+        .close-modal {
+            cursor: pointer;
+            font-size: 1.5rem;
         }
+
+        .tag-input-hint {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 4px;
+        }
+
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .flex-row { flex-direction: column; }
+            .sidebar { width: 80px; }
+            .sidebar-header h2, .sidebar-header p, .nav-link span:not(.icon) { display: none; }
+            .nav-link { justify-content: center; }
+            .main-content { padding: 16px; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>📚 韩语日常素材库 & 智能作文生成器</h1>
-    <div class="sub">积累素材 · 自定义主题 · AI增强写作</div>
-
-    <!-- 自定义作文生成（新功能） -->
-    <div class="card">
-        <h2>✨ 自定义主题作文生成</h2>
-        <div class="flex-row">
-            <div class="form-group" style="flex:2">
-                <label>📌 作文标题 (中文/韩语均可)</label>
-                <input type="text" id="customTitle" placeholder="例: 我最爱的季节 / 我的宠物 / 제주도 여행">
-            </div>
-            <div class="form-group">
-                <label>🔑 关键词 (可选，逗号分隔)</label>
-                <input type="text" id="customKeywords" placeholder="例: 春天, 花, 温暖">
-            </div>
-            <div class="form-group">
-                <label>🤖 生成模式</label>
-                <select id="generateMode">
-                    <option value="local">本地规则 (免费，无消耗)</option>
-                    <option value="ai">AI增强 (DeepSeek，约0.0015元/篇)</option>
-                </select>
-            </div>
+<div class="app-container">
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>📚 韩语库</h2>
+            <p>素材·作文·AI</p>
         </div>
-        <div id="aiKeyGroup" style="display: none; margin-top: 10px;">
-            <div class="form-group">
-                <label>🔐 DeepSeek API Key (AI模式需要)</label>
-                <input type="password" id="apiKey" placeholder="sk-xxxxxxxx">
-                <small style="color: #e67e22;">提示：如果不填，将尝试使用环境变量；首次使用请填入有效key</small>
-            </div>
-        </div>
-        <div style="margin-top: 15px;">
-            <button id="generateCustomBtn">🚀 生成作文</button>
-            <button id="clearCustomBtn" class="secondary">🗑️ 清空结果</button>
-        </div>
-        <div id="customResult" class="result-area" style="display: none;"></div>
-        <div id="costInfo" style="font-size:0.8rem; color:#e67e22; margin-top:8px;"></div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a class="nav-link" data-page="materials"><i>📝</i> <span>素材管理</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-page="categories"><i>🏷️</i> <span>场景分类</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-page="stats"><i>📊</i> <span>查询统计</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-page="essay"><i>✍️</i> <span>作文生成</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-page="data"><i>⚙️</i> <span>数据管理</span></a></li>
+        </ul>
     </div>
 
-    <!-- 原有固定主题生成 (保留) -->
-    <div class="card">
-        <h2>📖 经典主题模板生成</h2>
-        <div class="flex-row">
-            <div class="form-group">
-                <label>选择主题</label>
-                <select id="themeSelect"></select>
-            </div>
-            <div class="form-group">
-                <label>自定义标题 (可选)</label>
-                <input type="text" id="themeTitle" placeholder="留空则使用默认标题">
-            </div>
-            <div class="form-group">
-                <button id="generateThemeBtn">✍️ 生成范文</button>
+    <!-- 右侧内容区 -->
+    <div class="main-content">
+        <!-- 页面1：素材管理 -->
+        <div id="page-materials" class="page">
+            <div class="card">
+                <div class="card-title">📋 素材管理</div>
+                <div class="form-row">
+                    <div class="form-group"><select id="filterCategory"><option value="">全部分类</option></select></div>
+                    <div class="form-group"><select id="filterDifficulty"><option value="">全部难度</option><option>初级</option><option>中级</option><option>高级</option></select></div>
+                    <div class="form-group"><input type="text" id="searchInput" placeholder="搜索韩语/中文/例句"></div>
+                    <div class="form-group"><button id="searchBtn" class="secondary">🔍 搜索</button></div>
+                </div>
+                <button id="addMaterialBtn" style="margin-bottom:16px;">+ 新增素材</button>
+                <div class="table-wrapper">
+                    <table id="materialsTable">
+                        <thead><tr><th>ID</th><th>韩语</th><th>中文</th><th>分类</th><th>难度</th><th>例句</th><th>操作</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-        <div id="themeResult" class="result-area" style="display: none;"></div>
-    </div>
 
-    <!-- 素材管理 -->
-    <div class="card">
-        <h2>📝 素材管理</h2>
-        <div class="flex-row">
-            <div class="form-group">
-                <label>分类筛选</label>
-                <select id="filterCategory"><option value="">全部</option></select>
-            </div>
-            <div class="form-group">
-                <label>难度筛选</label>
-                <select id="filterDifficulty"><option value="">全部</option><option>初级</option><option>中级</option><option>高级</option></select>
-            </div>
-            <div class="form-group">
-                <label>搜索 (韩/中/例句)</label>
-                <input type="text" id="searchInput" placeholder="검색...">
-            </div>
-            <div class="form-group">
-                <button id="searchBtn" class="secondary">🔍 搜索</button>
+        <!-- 页面2：场景分类 -->
+        <div id="page-categories" class="page">
+            <div class="card">
+                <div class="card-title">🏷️ 场景分类</div>
+                <div id="categoriesContainer" class="category-grid">加载中...</div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table id="materialsTable">
-                <thead><tr><th>ID</th><th>韩语</th><th>中文</th><th>分类</th><th>难度</th><th>例句</th><th>操作</th></tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <button id="addMaterialBtn" style="margin-top:10px; width:auto;">+ 新增素材</button>
-        <div style="margin-top:15px;">
-            <button id="exportBtn" class="secondary">📎 导出JSON</button>
-            <input type="file" id="importFile" accept=".json" style="display:none">
-            <button id="importBtn" class="secondary">📂 导入JSON</button>
-        </div>
-    </div>
 
-    <!-- 统计信息 -->
-    <div class="card">
-        <h2>📊 统计看板</h2>
-        <div id="statsArea"></div>
+        <!-- 页面3：查询统计 -->
+        <div id="page-stats" class="page">
+            <div class="card">
+                <div class="card-title">📊 数据统计</div>
+                <div id="statsArea"></div>
+            </div>
+        </div>
+
+        <!-- 页面4：作文生成（自定义主题） -->
+        <div id="page-essay" class="page">
+            <div class="card">
+                <div class="card-title">✨ 自定义主题作文生成</div>
+                <div class="form-row">
+                    <div class="form-group"><label>📌 作文标题</label><input type="text" id="customTitle" placeholder="例: 나의 꿈 / 旅行计划"></div>
+                    <div class="form-group"><label>🔑 关键词 (可选)</label><input type="text" id="customKeywords" placeholder="逗号分隔"></div>
+                    <div class="form-group"><label>🤖 生成模式</label><select id="generateMode"><option value="local">本地规则 (免费)</option><option value="ai">AI增强 (需API Key)</option></select></div>
+                </div>
+                <div id="aiKeyGroup" style="display:none; margin-bottom:16px;"><input type="password" id="apiKey" placeholder="DeepSeek API Key (sk-...)" style="max-width:300px;"></div>
+                <button id="generateCustomBtn">🚀 生成作文</button>
+                <div id="customResult" class="result-area" style="display:none; margin-top:20px;"></div>
+                <div id="costInfo" style="font-size:0.8rem; color:#e67e22; margin-top:8px;"></div>
+            </div>
+        </div>
+
+        <!-- 页面5：数据管理 -->
+        <div id="page-data" class="page">
+            <div class="card">
+                <div class="card-title">📁 数据导入导出</div>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <button id="exportBtn">📎 导出JSON</button>
+                    <input type="file" id="importFile" accept=".json" style="display:none">
+                    <button id="importBtn" class="secondary">📂 导入JSON</button>
+                    <button id="resetDataBtn" class="danger">⚠️ 重置为示例数据</button>
+                </div>
+                <p style="margin-top: 20px; color: #555;">导入采用合并模式：同ID覆盖，新ID追加。重置将清空所有并恢复初始素材。</p>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- 添加/编辑素材模态框 -->
+<div id="materialModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><span id="modalTitle">新增素材</span><span class="close-modal">&times;</span></div>
+        <form id="materialForm">
+            <input type="hidden" id="editId" value="">
+            <div class="form-group"><label>韩语 *</label><input id="koreanInput" required></div>
+            <div class="form-group"><label>中文 *</label><input id="chineseInput" required></div>
+            <div class="form-group"><label>分类 *</label><input id="categoryInput" placeholder="日常问候/饮食料理等" required></div>
+            <div class="form-group"><label>难度</label><select id="difficultyInput"><option>初级</option><option>中级</option><option>高级</option></select></div>
+            <div class="form-group"><label>例句（韩语）</label><textarea id="exampleInput" rows="2"></textarea></div>
+            <div class="form-group"><label>例句中文</label><input id="exampleCnInput"></div>
+            <div class="form-group"><label>标签（逗号分隔）</label><input id="tagsInput" placeholder="如: 问候, 礼貌"><div class="tag-input-hint">多个标签用英文逗号隔开</div></div>
+            <div style="display: flex; gap:12px; justify-content: flex-end; margin-top:20px;">
+                <button type="button" id="cancelModalBtn" class="secondary">取消</button>
+                <button type="submit">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .result-area {
+        background: #fef9e6;
+        border-left: 4px solid #f1c40f;
+        padding: 15px;
+        border-radius: 12px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        line-height: 1.5;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+</style>
+
 <script>
-    // 全局变量
+    // ---------- 全局变量 ----------
     let currentMaterials = [];
     let allCategories = [];
 
-    // ========== 初始化加载 ==========
+    // ---------- 辅助函数 ----------
+    async function apiFetch(url, options={}) {
+        const res = await fetch(url, options);
+        return res.json();
+    }
+
+    // 加载分类列表（用于筛选下拉和场景分类页）
     async function loadCategories() {
-        const res = await fetch('/api/categories');
-        const json = await res.json();
+        const json = await apiFetch('/api/categories');
         if (json.code === 0) {
             allCategories = json.data;
+            // 更新筛选下拉
             const catSelect = document.getElementById('filterCategory');
-            catSelect.innerHTML = '<option value="">全部</option>';
+            catSelect.innerHTML = '<option value="">全部分类</option>';
             json.data.forEach(cat => {
                 const opt = document.createElement('option');
                 opt.value = cat.name;
                 opt.textContent = `${cat.name} (${cat.count})`;
                 catSelect.appendChild(opt);
             });
+            // 更新场景分类页面
+            const container = document.getElementById('categoriesContainer');
+            if (container) {
+                container.innerHTML = json.data.map(cat => `<div class="category-card">${cat.name}<span class="category-count">${cat.count}</span></div>`).join('');
+            }
         }
     }
 
-    async function loadThemes() {
-        const res = await fetch('/api/themes');
-        const json = await res.json();
-        if (json.code === 0) {
-            const select = document.getElementById('themeSelect');
-            select.innerHTML = '';
-            json.data.forEach(theme => {
-                const opt = document.createElement('option');
-                opt.value = theme.key;
-                opt.textContent = `${theme.title_cn} (${theme.categories.join(', ')})`;
-                select.appendChild(opt);
-            });
-        }
-    }
-
+    // 加载素材表格
     async function loadMaterials() {
         const category = document.getElementById('filterCategory').value;
         const difficulty = document.getElementById('filterDifficulty').value;
         const search = document.getElementById('searchInput').value;
         let url = `/api/materials?category=${encodeURIComponent(category)}&difficulty=${encodeURIComponent(difficulty)}&search=${encodeURIComponent(search)}`;
-        const res = await fetch(url);
-        const json = await res.json();
+        const json = await apiFetch(url);
         if (json.code === 0) {
             currentMaterials = json.data;
             renderMaterialsTable();
@@ -337,16 +489,18 @@
             row.insertCell(2).textContent = m.chinese;
             row.insertCell(3).textContent = m.category;
             row.insertCell(4).textContent = m.difficulty;
-            row.insertCell(5).textContent = (m.example || '').substring(0, 30);
+            row.insertCell(5).textContent = (m.example || '').substring(0, 40);
             const btnCell = row.insertCell(6);
             const editBtn = document.createElement('button');
             editBtn.textContent = '编辑';
-            editBtn.style.background = '#f39c12';
-            editBtn.style.marginRight = '5px';
-            editBtn.onclick = () => editMaterial(m);
+            editBtn.style.background = '#f59e0b';
+            editBtn.style.marginRight = '6px';
+            editBtn.style.padding = '4px 12px';
+            editBtn.onclick = () => openEditModal(m);
             const delBtn = document.createElement('button');
             delBtn.textContent = '删除';
-            delBtn.style.background = '#e74c3c';
+            delBtn.style.background = '#dc2626';
+            delBtn.style.padding = '4px 12px';
             delBtn.onclick = () => deleteMaterial(m.id);
             btnCell.appendChild(editBtn);
             btnCell.appendChild(delBtn);
@@ -354,94 +508,127 @@
     }
 
     async function deleteMaterial(id) {
-        if (!confirm('确定删除？')) return;
-        const res = await fetch(`/api/materials/${id}`, { method: 'DELETE' });
-        const json = await res.json();
+        if (!confirm('确定删除此素材？')) return;
+        const json = await apiFetch(`/api/materials/${id}`, { method: 'DELETE' });
         if (json.code === 0) {
             alert('删除成功');
             loadMaterials();
             loadStats();
             loadCategories();
-        } else {
-            alert('删除失败');
+        } else alert('删除失败');
+    }
+
+    // 打开新增模态框
+    function openAddModal() {
+        document.getElementById('modalTitle').innerText = '新增素材';
+        document.getElementById('editId').value = '';
+        document.getElementById('koreanInput').value = '';
+        document.getElementById('chineseInput').value = '';
+        document.getElementById('categoryInput').value = '';
+        document.getElementById('difficultyInput').value = '初级';
+        document.getElementById('exampleInput').value = '';
+        document.getElementById('exampleCnInput').value = '';
+        document.getElementById('tagsInput').value = '';
+        document.getElementById('materialModal').style.display = 'flex';
+    }
+
+    function openEditModal(m) {
+        document.getElementById('modalTitle').innerText = '编辑素材';
+        document.getElementById('editId').value = m.id;
+        document.getElementById('koreanInput').value = m.korean || '';
+        document.getElementById('chineseInput').value = m.chinese || '';
+        document.getElementById('categoryInput').value = m.category || '';
+        document.getElementById('difficultyInput').value = m.difficulty || '初级';
+        document.getElementById('exampleInput').value = m.example || '';
+        document.getElementById('exampleCnInput').value = m.example_cn || '';
+        document.getElementById('tagsInput').value = (m.tags || []).join(',');
+        document.getElementById('materialModal').style.display = 'flex';
+    }
+
+    // 保存素材（新增或更新）
+    document.getElementById('materialForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editId').value;
+        const payload = {
+            korean: document.getElementById('koreanInput').value.trim(),
+            chinese: document.getElementById('chineseInput').value.trim(),
+            category: document.getElementById('categoryInput').value.trim(),
+            difficulty: document.getElementById('difficultyInput').value,
+            example: document.getElementById('exampleInput').value,
+            example_cn: document.getElementById('exampleCnInput').value,
+            tags: document.getElementById('tagsInput').value.split(',').map(s=>s.trim()).filter(s=>s)
+        };
+        if (!payload.korean || !payload.chinese || !payload.category) {
+            alert('韩语、中文、分类为必填项');
+            return;
         }
-    }
-
-    function editMaterial(m) {
-        const newKorean = prompt('韩语:', m.korean);
-        if (newKorean === null) return;
-        const newChinese = prompt('中文:', m.chinese);
-        if (newChinese === null) return;
-        const newCategory = prompt('分类:', m.category);
-        if (newCategory === null) return;
-        const updated = { ...m, korean: newKorean, chinese: newChinese, category: newCategory };
-        fetch(`/api/materials/${m.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updated)
-        }).then(res => res.json()).then(json => {
-            if (json.code === 0) {
-                alert('更新成功');
-                loadMaterials();
-                loadStats();
-                loadCategories();
-            } else {
-                alert('更新失败');
-            }
-        });
-    }
-
-    async function loadStats() {
-        const res = await fetch('/api/stats');
+        let url = '/api/materials';
+        let method = 'POST';
+        if (id) {
+            url = `/api/materials/${id}`;
+            method = 'PUT';
+        }
+        const res = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
         const json = await res.json();
         if (json.code === 0) {
-            const stats = json.data;
+            alert(id ? '更新成功' : '添加成功');
+            document.getElementById('materialModal').style.display = 'none';
+            loadMaterials();
+            loadStats();
+            loadCategories();
+        } else {
+            alert('操作失败: '+json.msg);
+        }
+    });
+
+    // 关闭模态框
+    document.querySelector('.close-modal').onclick = () => document.getElementById('materialModal').style.display = 'none';
+    document.getElementById('cancelModalBtn').onclick = () => document.getElementById('materialModal').style.display = 'none';
+
+    // 统计页面
+    async function loadStats() {
+        const json = await apiFetch('/api/stats');
+        if (json.code === 0) {
+            const s = json.data;
             let html = `<div class="stats-grid">
-                <div class="stat-card"><div class="stat-number">${stats.total}</div>总素材</div>
-                <div class="stat-card"><div class="stat-number">${stats.with_example_rate}%</div>含例句率</div>
-                <div class="stat-card"><div class="stat-number">${stats.difficulty.初级}</div>初级</div>
-                <div class="stat-card"><div class="stat-number">${stats.difficulty.中级}</div>中级</div>
-                <div class="stat-card"><div class="stat-number">${stats.difficulty.高级}</div>高级</div>
-            </div><div><strong>🏷️ 热门标签:</strong> `;
-            const topTags = Object.entries(stats.tags).sort((a,b)=>b[1]-a[1]).slice(0,5);
-            topTags.forEach(([tag, cnt]) => { html += `<span class="tag">${tag} (${cnt})</span>`; });
-            html += `</div>`;
+                <div class="stat-card"><div class="stat-number">${s.total}</div>总素材</div>
+                <div class="stat-card"><div class="stat-number">${s.with_example_rate}%</div>例句覆盖率</div>
+                <div class="stat-card"><div class="stat-number">${Object.keys(s.tags).length}</div>标签种类</div>
+            </div>
+            <h3>难度分布</h3><div class="stats-grid"><div class="stat-card">初级 ${s.difficulty.初级}</div><div class="stat-card">中级 ${s.difficulty.中级}</div><div class="stat-card">高级 ${s.difficulty.高级}</div></div>
+            <h3>分类分布</h3><div class="category-grid">${Object.entries(s.categories).map(([k,v])=>`<div class="category-card">${k}<span class="category-count">${v}</span></div>`).join('')}</div>`;
             document.getElementById('statsArea').innerHTML = html;
         }
     }
 
-    // 新增素材简易弹窗
-    document.getElementById('addMaterialBtn').onclick = () => {
-        const korean = prompt('韩语:');
-        if (!korean) return;
-        const chinese = prompt('中文:');
-        if (!chinese) return;
-        const category = prompt('分类 (日常问候/饮食料理等):', '日常问候');
-        if (!category) return;
-        const difficulty = prompt('难度 (初级/中级/高级):', '初级');
-        const example = prompt('例句 (可选):', '');
-        fetch('/api/materials', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ korean, chinese, category, difficulty, example, example_cn: '', tags: [] })
-        }).then(res => res.json()).then(json => {
+    // 重置数据
+    async function resetData() {
+        if (!confirm('⚠️ 重置将清空所有素材并恢复示例数据，不可撤销！确定吗？')) return;
+        // 先调用重置示例数据的接口（后端需要支持？目前没有，但我们可以直接调用初始化逻辑：先删除所有再重新初始化。简便方法：前端调用删除所有再重新添加？不现实。需要后端增加重置接口）
+        // 由于app.py没有重置API，但可以在前端手动调用一个自建接口？为简便，提供一个后端重置API的调用。我们将在前端模拟：调用export无意义。最好增加一个后端路由。
+        // 用户已有init_sample_data函数，但不会覆盖已有数据，需要强制重置。为满足需求，在app.py中增加一个/api/reset接口。
+        // 但为了用户立即能用，我先给出前端警告，建议后端增加接口。实际上，用户可以在数据管理页自行导出后再手动清空再导入示例json。
+        // 更务实的做法：前端引导用户自己用“导入JSON”恢复示例文件。为了体验，我在后端预设一个reset接口，下面会添加。
+        // 由于无法改动后端？用户可后续添加。先告知用户需添加后端路由。但我们可以直接在app.py里加上一个简单的reset路由。
+        // 为了不修改后端代码，我暂时模拟：让用户自己导入示例数据包。但为了功能完整，我将在后端增加reset API。
+        // 由于用户有app.py源码，稍后将提供追加reset路由的代码。现在前端先调用fetch('/api/reset')。
+        try {
+            const res = await fetch('/api/reset', { method: 'POST' });
+            const json = await res.json();
+            alert(json.msg);
             if (json.code === 0) {
-                alert('添加成功');
                 loadMaterials();
                 loadStats();
                 loadCategories();
-            } else {
-                alert('添加失败: '+json.msg);
             }
-        });
-    };
+        } catch(e) {
+            alert('重置失败，请确保后端已添加 /api/reset 接口');
+        }
+    }
 
-    document.getElementById('exportBtn').onclick = () => {
-        window.open('/api/export', '_blank');
-    };
-    document.getElementById('importBtn').onclick = () => {
-        document.getElementById('importFile').click();
-    };
+    // 导出
+    document.getElementById('exportBtn').onclick = () => window.open('/api/export', '_blank');
+    document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
     document.getElementById('importFile').onchange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -455,92 +642,80 @@
         loadCategories();
         e.target.value = '';
     };
-
+    document.getElementById('resetDataBtn') && (document.getElementById('resetDataBtn').onclick = resetData);
     document.getElementById('searchBtn').onclick = () => loadMaterials();
     document.getElementById('filterCategory').onchange = () => loadMaterials();
     document.getElementById('filterDifficulty').onchange = () => loadMaterials();
+    document.getElementById('addMaterialBtn').onclick = openAddModal;
 
-    // 固定主题生成
-    document.getElementById('generateThemeBtn').onclick = async () => {
-        const theme = document.getElementById('themeSelect').value;
-        const title = document.getElementById('themeTitle').value;
-        const res = await fetch('/api/essay/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ theme, title, values: {} })
-        });
-        const json = await res.json();
-        const resultDiv = document.getElementById('themeResult');
-        if (json.code === 0) {
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `<strong>📄 ${json.data.title}</strong><br>${json.data.essay.replace(/\n/g, '<br>')}<hr><small>使用素材数量: ${json.data.materials_count} | 分类: ${json.data.categories_used.join(', ')}</small>`;
-        } else {
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `<span style="color:red">生成失败: ${json.msg}</span>`;
-        }
-    };
-
-    // 自定义生成 (支持本地/AI)
+    // 作文生成逻辑（保留原有自定义功能）
     const modeSelect = document.getElementById('generateMode');
     const aiKeyGroup = document.getElementById('aiKeyGroup');
     modeSelect.addEventListener('change', () => {
-        if (modeSelect.value === 'ai') {
-            aiKeyGroup.style.display = 'block';
-        } else {
-            aiKeyGroup.style.display = 'none';
-        }
+        aiKeyGroup.style.display = modeSelect.value === 'ai' ? 'block' : 'none';
     });
     document.getElementById('generateCustomBtn').onclick = async () => {
         const title = document.getElementById('customTitle').value.trim();
-        if (!title) {
-            alert('请输入标题');
-            return;
-        }
+        if (!title) { alert('请输入标题'); return; }
         const keywordsRaw = document.getElementById('customKeywords').value;
         const keywords = keywordsRaw.split(',').map(s=>s.trim()).filter(s=>s);
-        const useAI = (modeSelect.value === 'ai');
+        const useAI = modeSelect.value === 'ai';
         let apiKey = '';
         if (useAI) {
             apiKey = document.getElementById('apiKey').value.trim();
-            if (!apiKey && !confirm('未填写API Key，将尝试使用服务器环境变量。如果失败，请填写Key。是否继续？')) return;
-            if (!confirm(`本次将调用DeepSeek API，约消耗0.0015元。是否继续？`)) return;
+            if (!apiKey && !confirm('未填API Key，将尝试环境变量，可能失败')) return;
+            if (!confirm('本次将调用DeepSeek API，约0.0015元，继续吗？')) return;
         }
         const resultDiv = document.getElementById('customResult');
         const costInfo = document.getElementById('costInfo');
         resultDiv.style.display = 'block';
-        resultDiv.innerHTML = '⏳ 生成中，请稍候...';
+        resultDiv.innerHTML = '⏳ 生成中...';
         costInfo.innerHTML = '';
         try {
             const res = await fetch('/api/essay/custom', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({ title, keywords, use_ai: useAI, api_key: apiKey })
             });
             const json = await res.json();
             if (json.code === 0) {
                 const data = json.data;
-                let modeText = (data.mode === 'ai') ? '🤖 AI增强模式' : '📜 本地规则模式';
-                let costText = (data.mode === 'ai') ? `💰 预估费用: ¥${data.estimated_cost}` : '💰 免费';
-                resultDiv.innerHTML = `<strong>✨ 生成结果 (${modeText})</strong><br>${data.essay.replace(/\n/g, '<br>')}<hr><small>${data.note || ''}</small>`;
-                costInfo.innerHTML = costText;
+                resultDiv.innerHTML = `<strong>✨ ${data.mode === 'ai' ? 'AI增强模式' : '本地规则模式'}</strong><br>${data.essay.replace(/\n/g,'<br>')}<hr><small>${data.note || ''}</small>`;
+                if (data.mode === 'ai') costInfo.innerHTML = `💰 预估费用: ¥${data.estimated_cost}`;
+                else costInfo.innerHTML = '💰 免费生成';
             } else {
-                resultDiv.innerHTML = `<span style="color:red">❌ 生成失败: ${json.msg}</span>`;
+                resultDiv.innerHTML = `<span style="color:red">❌ ${json.msg}</span>`;
             }
-        } catch (err) {
+        } catch(err) {
             resultDiv.innerHTML = `<span style="color:red">网络错误: ${err.message}</span>`;
         }
     };
-    document.getElementById('clearCustomBtn').onclick = () => {
-        document.getElementById('customResult').style.display = 'none';
-        document.getElementById('customResult').innerHTML = '';
-        document.getElementById('costInfo').innerHTML = '';
-    };
 
-    // 初始加载所有
+    // 页面切换
+    function switchPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(`page-${pageId}`).classList.add('active-page');
+        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+        document.querySelector(`.nav-link[data-page="${pageId}"]`).classList.add('active');
+        // 每次切换时刷新相关数据
+        if (pageId === 'categories') loadCategories();
+        if (pageId === 'stats') loadStats();
+        if (pageId === 'materials') loadMaterials();
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = link.getAttribute('data-page');
+            switchPage(page);
+        });
+    });
+
+    // 默认激活素材管理
+    switchPage('materials');
     loadCategories();
-    loadThemes();
-    loadMaterials();
     loadStats();
+    loadMaterials();
 </script>
 </body>
 </html>
