@@ -17,7 +17,6 @@
             color: #1e2a3a;
         }
 
-        /* 整体布局 */
         .app-container {
             display: flex;
             min-height: 100vh;
@@ -88,7 +87,6 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
-        /* 右侧主内容区 */
         .main-content {
             flex: 1;
             padding: 24px 32px;
@@ -109,7 +107,6 @@
             to { opacity: 1; transform: translateY(0);}
         }
 
-        /* 卡片样式 */
         .card {
             background: white;
             border-radius: 20px;
@@ -126,7 +123,6 @@
             padding-left: 16px;
         }
 
-        /* 表单 & 按钮 */
         .form-row {
             display: flex;
             flex-wrap: wrap;
@@ -193,7 +189,6 @@
             background: #b91c1c;
         }
 
-        /* 表格 */
         .table-wrapper {
             overflow-x: auto;
             margin-top: 16px;
@@ -215,7 +210,6 @@
             font-weight: 600;
         }
 
-        /* 统计卡片网格 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
@@ -262,7 +256,6 @@
             font-size: 0.8rem;
         }
 
-        /* 模态框 */
         .modal {
             display: none;
             position: fixed;
@@ -297,13 +290,6 @@
             font-size: 1.5rem;
         }
 
-        .tag-input-hint {
-            font-size: 0.75rem;
-            color: #555;
-            margin-top: 4px;
-        }
-
-        /* 素材卡片样式 (用于场景分类) */
         .material-card {
             background: white;
             border-radius: 20px;
@@ -393,7 +379,6 @@
 </head>
 <body>
 <div class="app-container">
-    <!-- 左侧导航栏 -->
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>📚 韩语库</h2>
@@ -406,16 +391,10 @@
             <li class="nav-item"><a class="nav-link" data-page="essay"><i>✍️</i> <span>作文生成</span></a></li>
             <li class="nav-item"><a class="nav-link" data-page="data"><i>⚙️</i> <span>数据管理</span></a></li>
         </ul>
-        <div style="position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 0.7rem; opacity: 0.6;">
-            <div id="userStatus">未登录</div>
-            <button id="loginBtn" style="background: none; border:1px solid white; margin-top:8px; padding:4px 12px;">登录/注册</button>
-            <button id="logoutBtn" style="background: none; border:1px solid white; margin-top:8px; padding:4px 12px; display:none;">退出</button>
-        </div>
     </div>
 
-    <!-- 右侧内容区 -->
     <div class="main-content">
-        <!-- 页面1：素材管理 -->
+        <!-- 素材管理页面 -->
         <div id="page-materials" class="page">
             <div class="card">
                 <div class="card-title">📋 素材管理</div>
@@ -425,7 +404,7 @@
                     <div class="form-group"><input type="text" id="searchInput" placeholder="搜索韩语/中文/例句"></div>
                     <div class="form-group"><button id="searchBtn" class="secondary">🔍 搜索</button></div>
                 </div>
-                <button id="addMaterialBtn" style="margin-bottom:16px;">+ 新增素材</button>
+                <button id="addMaterialBtn">+ 新增素材</button>
                 <div class="table-wrapper">
                     <table id="materialsTable">
                         <thead><tr><th>ID</th><th>韩语</th><th>中文</th><th>分类</th><th>难度</th><th>例句</th><th>操作</th></tr></thead>
@@ -435,7 +414,7 @@
             </div>
         </div>
 
-        <!-- 页面2：场景分类（增强版：分类按钮 + 素材卡片） -->
+        <!-- 场景分类（卡片式） -->
         <div id="page-categories" class="page">
             <div class="card">
                 <div class="card-title">📂 场景分类</div>
@@ -446,7 +425,7 @@
             </div>
         </div>
 
-        <!-- 页面3：查询统计 -->
+        <!-- 统计页面 -->
         <div id="page-stats" class="page">
             <div class="card">
                 <div class="card-title">📊 数据统计</div>
@@ -454,7 +433,7 @@
             </div>
         </div>
 
-        <!-- 页面4：作文生成 -->
+        <!-- 作文生成页面 -->
         <div id="page-essay" class="page">
             <div class="card">
                 <div class="card-title">✨ 自定义主题作文生成</div>
@@ -470,7 +449,7 @@
             </div>
         </div>
 
-        <!-- 页面5：数据管理 -->
+        <!-- 数据管理页面 -->
         <div id="page-data" class="page">
             <div class="card">
                 <div class="card-title">📁 数据导入导出</div>
@@ -486,21 +465,6 @@
     </div>
 </div>
 
-<!-- 登录/注册模态框 -->
-<div id="authModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header"><span id="authModalTitle">登录</span><span class="close-modal">&times;</span></div>
-        <form id="authForm">
-            <div class="form-group"><label>用户名</label><input id="authUsername" required></div>
-            <div class="form-group"><label>密码</label><input type="password" id="authPassword" required></div>
-            <div style="display: flex; gap:12px; justify-content: space-between; margin-top:20px;">
-                <button type="button" id="switchAuthBtn">去注册</button>
-                <button type="submit" id="authSubmitBtn">登录</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <!-- 素材编辑模态框 -->
 <div id="materialModal" class="modal">
     <div class="modal-content">
@@ -513,7 +477,7 @@
             <div class="form-group"><label>难度</label><select id="difficultyInput"><option>初级</option><option>中级</option><option>高级</option></select></div>
             <div class="form-group"><label>例句（韩语）</label><textarea id="exampleInput" rows="2"></textarea></div>
             <div class="form-group"><label>例句中文</label><input id="exampleCnInput"></div>
-            <div class="form-group"><label>标签（逗号分隔）</label><input id="tagsInput" placeholder="如: 问候, 礼貌"><div class="tag-input-hint">多个标签用英文逗号隔开</div></div>
+            <div class="form-group"><label>标签（逗号分隔）</label><input id="tagsInput" placeholder="如: 问候, 礼貌"></div>
             <div style="display: flex; gap:12px; justify-content: flex-end; margin-top:20px;">
                 <button type="button" id="cancelModalBtn" class="secondary">取消</button>
                 <button type="submit">保存</button>
@@ -523,10 +487,13 @@
 </div>
 
 <script>
-    // ==================== 全局变量与辅助函数 ====================
+    // 全局数据
     let currentMaterials = [];
-    let allCategories = [];
-    let currentUser = null;
+
+    async function apiFetch(url, options={}) {
+        const res = await fetch(url, options);
+        return res.json();
+    }
 
     function escapeHtml(str) {
         if (!str) return '';
@@ -538,123 +505,27 @@
         });
     }
 
-    async function apiFetch(url, options={}) {
-        const res = await fetch(url, options);
-        return res.json();
-    }
-
-    // 检查登录状态
-    async function checkAuth() {
-        const res = await fetch('/api/current_user');
-        const json = await res.json();
+    // 加载分类下拉
+    async function loadFilterCategories() {
+        const json = await apiFetch('/api/categories');
         if (json.code === 0) {
-            currentUser = json.username;
-            document.getElementById('userStatus').innerText = `👤 ${currentUser}`;
-            document.getElementById('loginBtn').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
-            return true;
-        } else {
-            currentUser = null;
-            document.getElementById('userStatus').innerText = '未登录';
-            document.getElementById('loginBtn').style.display = 'inline-block';
-            document.getElementById('logoutBtn').style.display = 'none';
-            return false;
+            const select = document.getElementById('filterCategory');
+            select.innerHTML = '<option value="">全部分类</option>';
+            json.data.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.name;
+                opt.textContent = `${cat.name} (${cat.count})`;
+                select.appendChild(opt);
+            });
         }
     }
 
-    // 登录/注册模态框逻辑
-    let authMode = 'login'; // 'login' or 'register'
-    const authModal = document.getElementById('authModal');
-    const authModalTitle = document.getElementById('authModalTitle');
-    const authSubmitBtn = document.getElementById('authSubmitBtn');
-    const switchAuthBtn = document.getElementById('switchAuthBtn');
-    const authForm = document.getElementById('authForm');
-
-    document.getElementById('loginBtn').onclick = () => {
-        authMode = 'login';
-        authModalTitle.innerText = '登录';
-        authSubmitBtn.innerText = '登录';
-        switchAuthBtn.innerText = '去注册';
-        authModal.style.display = 'flex';
-    };
-    switchAuthBtn.onclick = () => {
-        if (authMode === 'login') {
-            authMode = 'register';
-            authModalTitle.innerText = '注册';
-            authSubmitBtn.innerText = '注册';
-            switchAuthBtn.innerText = '去登录';
-        } else {
-            authMode = 'login';
-            authModalTitle.innerText = '登录';
-            authSubmitBtn.innerText = '登录';
-            switchAuthBtn.innerText = '去注册';
-        }
-    };
-    authForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('authUsername').value.trim();
-        const password = document.getElementById('authPassword').value.trim();
-        if (!username || !password) {
-            alert('用户名和密码不能为空');
-            return;
-        }
-        const endpoint = authMode === 'login' ? '/api/login' : '/api/register';
-        const res = await fetch(endpoint, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({username, password})
-        });
-        const json = await res.json();
-        if (json.code === 0) {
-            alert(json.msg);
-            authModal.style.display = 'none';
-            if (authMode === 'login') {
-                checkAuth();
-                loadMaterials();
-                loadStats();
-                loadCategoryButtons();
-            } else {
-                // 注册后自动切换到登录模式
-                authMode = 'login';
-                authModalTitle.innerText = '登录';
-                authSubmitBtn.innerText = '登录';
-                switchAuthBtn.innerText = '去注册';
-                document.getElementById('authUsername').value = '';
-                document.getElementById('authPassword').value = '';
-            }
-        } else {
-            alert(json.msg);
-        }
-    };
-    document.getElementById('logoutBtn').onclick = async () => {
-        await fetch('/api/logout', {method: 'POST'});
-        checkAuth();
-        // 清空页面数据
-        document.querySelector('#materialsTable tbody').innerHTML = '';
-        document.getElementById('statsArea').innerHTML = '';
-        document.getElementById('materialCardsContainer').innerHTML = '';
-        document.getElementById('categoryButtons').innerHTML = '';
-        alert('已退出');
-        window.location.reload(); // 简单刷新
-    };
-    document.querySelectorAll('.close-modal').forEach(btn => {
-        btn.onclick = () => {
-            document.getElementById('materialModal').style.display = 'none';
-            document.getElementById('authModal').style.display = 'none';
-        };
-    });
-    window.onclick = (e) => {
-        if (e.target === document.getElementById('materialModal')) document.getElementById('materialModal').style.display = 'none';
-        if (e.target === document.getElementById('authModal')) document.getElementById('authModal').style.display = 'none';
-    };
-
-    // ==================== 素材管理 ====================
+    // 加载素材表格
     async function loadMaterials() {
-        if (!currentUser) return;
         const category = document.getElementById('filterCategory').value;
         const difficulty = document.getElementById('filterDifficulty').value;
         const search = document.getElementById('searchInput').value;
-        let url = `/api/materials?category=${encodeURIComponent(category)}&difficulty=${encodeURIComponent(difficulty)}&search=${encodeURIComponent(search)}`;
+        const url = `/api/materials?category=${encodeURIComponent(category)}&difficulty=${encodeURIComponent(difficulty)}&search=${encodeURIComponent(search)}`;
         const json = await apiFetch(url);
         if (json.code === 0) {
             currentMaterials = json.data;
@@ -697,8 +568,9 @@
             alert('删除成功');
             loadMaterials();
             loadStats();
-            loadCategories();
-            if (document.querySelector('#page-categories').classList.contains('active-page')) loadCategoryButtons();
+            if (document.querySelector('#page-categories').classList.contains('active-page')) {
+                loadCategoryButtons();
+            }
         } else alert('删除失败');
     }
 
@@ -758,20 +630,24 @@
             loadMaterials();
             loadStats();
             if (document.querySelector('#page-categories').classList.contains('active-page')) {
-                loadCategoryButtons(); // 刷新分类按钮及当前卡片
+                loadCategoryButtons();
             }
         } else {
             alert('操作失败: '+json.msg);
         }
     });
     document.getElementById('cancelModalBtn').onclick = () => document.getElementById('materialModal').style.display = 'none';
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.onclick = () => document.getElementById('materialModal').style.display = 'none';
+    });
+    window.onclick = (e) => {
+        if (e.target === document.getElementById('materialModal')) document.getElementById('materialModal').style.display = 'none';
+    };
 
-    // ==================== 场景分类（卡片展示） ====================
+    // 场景分类 - 卡片
     let currentCategory = null;
     async function loadCategoryButtons() {
-        if (!currentUser) return;
-        const res = await fetch('/api/categories');
-        const json = await res.json();
+        const json = await apiFetch('/api/categories');
         if (json.code === 0) {
             const categories = json.data;
             const container = document.getElementById('categoryButtons');
@@ -792,7 +668,6 @@
                 };
                 container.appendChild(btn);
             });
-            // 默认选中第一个
             const firstBtn = container.querySelector('button');
             if (firstBtn) {
                 firstBtn.classList.add('active');
@@ -841,9 +716,8 @@
         });
     }
 
-    // ==================== 统计 ====================
+    // 统计
     async function loadStats() {
-        if (!currentUser) return;
         const json = await apiFetch('/api/stats');
         if (json.code === 0) {
             const s = json.data;
@@ -858,7 +732,7 @@
         }
     }
 
-    // ==================== 数据导入导出 & 重置 ====================
+    // 数据导入导出重置
     document.getElementById('exportBtn').onclick = () => window.open('/api/export', '_blank');
     document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
     document.getElementById('importFile').onchange = async (e) => {
@@ -884,7 +758,7 @@
         if (document.querySelector('#page-categories').classList.contains('active-page')) loadCategoryButtons();
     };
 
-    // ==================== 作文生成 ====================
+    // 作文生成
     const modeSelect = document.getElementById('generateMode');
     const aiKeyGroup = document.getElementById('aiKeyGroup');
     modeSelect.addEventListener('change', () => {
@@ -927,7 +801,7 @@
         }
     };
 
-    // ==================== 页面切换 ====================
+    // 页面切换
     function switchPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(`page-${pageId}`).classList.add('active-page');
@@ -946,41 +820,19 @@
         });
     });
 
-    // ==================== 筛选监听 ====================
+    // 筛选监听
     document.getElementById('searchBtn').onclick = () => loadMaterials();
     document.getElementById('filterCategory').onchange = () => loadMaterials();
     document.getElementById('filterDifficulty').onchange = () => loadMaterials();
     document.getElementById('addMaterialBtn').onclick = openAddModal;
 
-    // ==================== 初始化 ====================
+    // 初始化
     async function init() {
-        await checkAuth();
-        if (currentUser) {
-            loadCategoriesForFilter(); // 加载分类下拉
-            loadMaterials();
-            loadStats();
-            loadCategoryButtons();
-            switchPage('materials');
-        } else {
-            // 未登录时显示登录模态框
-            authModal.style.display = 'flex';
-        }
+        await loadFilterCategories();
+        await loadMaterials();
+        await loadStats();
+        switchPage('materials');
     }
-
-    async function loadCategoriesForFilter() {
-        const json = await apiFetch('/api/categories');
-        if (json.code === 0) {
-            const catSelect = document.getElementById('filterCategory');
-            catSelect.innerHTML = '<option value="">全部分类</option>';
-            json.data.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat.name;
-                opt.textContent = `${cat.name} (${cat.count})`;
-                catSelect.appendChild(opt);
-            });
-        }
-    }
-
     init();
 </script>
 </body>
