@@ -258,6 +258,18 @@ def import_data():
     return jsonify({"code": 0, "msg": f"导入完成：新增 {added} 条，共 {len(current['materials'])} 条素材"})
 
 
+# ==================== 重置数据 API ====================
+@app.route("/api/reset", methods=["POST"])
+def reset_data():
+    """重置所有素材为初始示例数据（清空后重新初始化）"""
+    data = load_materials()
+    data["materials"] = []
+    data["next_id"] = 1
+    save_materials(data)
+    init_sample_data()
+    return jsonify({"code": 0, "msg": "已重置为示例数据"})
+
+
 # ==================== 主题作文生成（固定主题，保留原功能） ====================
 ESSAY_THEMES = {
     "자기소개": {
