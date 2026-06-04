@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>韩语素材库 · 智能作文生成器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .sub {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            transition: 0.2s;
+        }
+        .card h2 {
+            margin-top: 0;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+            font-size: 1.5rem;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        button.secondary {
+            background: #95a5a6;
+        }
+        button.secondary:hover {
+            background: #7f8c8d;
+        }
+        button.warning {
+            background: #e67e22;
+        }
+        button.warning:hover {
+            background: #d35400;
+        }
+        .result-area {
+            background: #fef9e6;
+            border-left: 4px solid #f1c40f;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .tag {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+        }
+        .mode-switch {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .mode-switch label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .flex-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 韩语日常素材库 & 智能作文生成器</h1>
+    <div class="sub">积累素材 · 自定义主题 · AI增强写作</div>
+
+    <!-- 自定义作文生成（新功能） -->
+    <div class="card">
+        <h2>✨ 自定义主题作文生成</h2>
+        <div class="flex-row">
+            <div class="form-group" style="flex:2">
+                <label>📌 作文标题 (中文/韩语均可)</label>
+                <input type="text" id="customTitle" placeholder="例: 我最爱的季节 / 我的宠物 / 제주도 여행">
+            </div>
+            <div class="form-group">
+                <label>🔑 关键词 (可选，逗号分隔)</label>
+                <input type="text" id="customKeywords" placeholder="例: 春天, 花, 温暖">
+            </div>
+            <div class="form-group">
+                <label>🤖 生成模式</label>
+                <select id="generateMode">
+                    <option value="local">本地规则 (免费，无消耗)</option>
+                    <option value="ai">AI增强 (DeepSeek，约0.0015元/篇)</option>
+                </select>
+            </div>
+        </div>
+        <div id="aiKeyGroup" style="display: none; margin-top: 10px;">
+            <div class="form-group">
+                <label>🔐 DeepSeek API Key (AI模式需要)</label>
+                <input type="password" id="apiKey" placeholder="sk-xxxxxxxx">
+                <small style="color: #e67e22;">提示：如果不填，将尝试使用环境变量；首次使用请填入有效key</small>
+            </div>
+        </div>
+        <div style="margin-top: 15px;">
+            <button id="generateCustomBtn">🚀 生成作文</button>
+            <button id="clearCustomBtn" class="secondary">🗑️ 清空结果</button>
+        </div>
+        <div id="customResult" class="result-area" style="display: none;"></div>
+        <div id="costInfo" style="font-size:0.8rem; color:#e67e22; margin-top:8px;"></div>
+    </div>
+
+    <!-- 原有固定主题生成 (保留) -->
+    <div class="card">
+        <h2>📖 经典主题模板生成</h2>
+        <div class="flex-row">
+            <div class="form-group">
+                <label>选择主题</label>
+                <select id="themeSelect"></select>
+            </div>
+            <div class="form-group">
+                <label>自定义标题 (可选)</label>
+                <input type="text" id="themeTitle" placeholder="留空则使用默认标题">
+            </div>
+            <div class="form-group">
+                <button id="generateThemeBtn">✍️ 生成范文</button>
+            </div>
+        </div>
+        <div id="themeResult" class="result-area" style="display: none;"></div>
+    </div>
+
+    <!-- 素材管理 -->
+    <div class="card">
+        <h2>📝 素材管理</h2>
+        <div class="flex-row">
+            <div class="form-group">
+                <label>分类筛选</label>
+                <select id="filterCategory"><option value="">全部</option></select>
+            </div>
+            <div class="form-group">
+                <label>难度筛选</label>
+                <select id="filterDifficulty"><option value="">全部</option><option>初级</option><option>中级</option><option>高级</option></select>
+            </div>
+            <div class="form-group">
+                <label>搜索 (韩/中/例句)</label>
+                <input type="text" id="searchInput" placeholder="검색...">
+            </div>
+            <div class="form-group">
+                <button id="searchBtn" class="secondary">🔍 搜索</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="materialsTable">
+                <thead><tr><th>ID</th><th>韩语</th><th>中文</th><th>分类</th><th>难度</th><th>例句</th><th>操作</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button id="addMaterialBtn" style="margin-top:10px; width:auto;">+ 新增素材</button>
+        <div style="margin-top:15px;">
+            <button id="exportBtn" class="secondary">📎 导出JSON</button>
+            <input type="file" id="importFile" accept=".json" style="display:none">
+            <button id="importBtn" class="secondary">📂 导入JSON</button>
+        </div>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="card">
+        <h2>📊 统计看板</h2>
+        <div id="statsArea"></div>
+    </div>
+</div>
+
+<script>
+    // 全局变量
+    let currentMaterials = [];
+    let allCategories = [];
+
+    // ========== 初始化加载 ==========
+    async function loadCategories() {
+        const res = await fetch('/api/categories');
+        const json = await res.json();
+        if (json.code === 0) {
+            allCategories = json.data;
+            const catSelect = document.getElementById('filterCategory');
+            catSelect.innerHTML = '<option value="">全部</option>';
+            json.data.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.name;
+                opt.textContent = `${cat.name} (${cat.count})`;
+                catSelect.appendChild(opt);
+            });
+        }
+    }
+
+    async function loadThemes() {
+        const res = await fetch('/api/themes');
+        const json = await res.json();
+        if (json.code === 0) {
+            const select = document.getElementById('themeSelect');
+            select.innerHTML = '';
+            json.data.forEach(theme => {
+                const opt = document.createElement('option');
+                opt.value = theme.key;
+                opt.textContent = `${theme.title_cn} (${theme.categories.join(', ')})`;
+                select.appendChild(opt);
+            });
+        }
+    }
+
+    async function loadMaterials() {
+        const category = document.getElementById('filterCategory').value;
+        const difficulty = document.getElementById('filterDifficulty').value;
+        const search = document.getElementById('searchInput').value;
+        let url = `/api/materials?category=${encodeURIComponent(category)}&difficulty=${encodeURIComponent(difficulty)}&search=${encodeURIComponent(search)}`;
+        const res = await fetch(url);
+        const json = await res.json();
+        if (json.code === 0) {
+            currentMaterials = json.data;
+            renderMaterialsTable();
+        }
+    }
+
+    function renderMaterialsTable() {
+        const tbody = document.querySelector('#materialsTable tbody');
+        tbody.innerHTML = '';
+        currentMaterials.forEach(m => {
+            const row = tbody.insertRow();
+            row.insertCell(0).textContent = m.id;
+            row.insertCell(1).textContent = m.korean;
+            row.insertCell(2).textContent = m.chinese;
+            row.insertCell(3).textContent = m.category;
+            row.insertCell(4).textContent = m.difficulty;
+            row.insertCell(5).textContent = (m.example || '').substring(0, 30);
+            const btnCell = row.insertCell(6);
+            const editBtn = document.createElement('button');
+            editBtn.textContent = '编辑';
+            editBtn.style.background = '#f39c12';
+            editBtn.style.marginRight = '5px';
+            editBtn.onclick = () => editMaterial(m);
+            const delBtn = document.createElement('button');
+            delBtn.textContent = '删除';
+            delBtn.style.background = '#e74c3c';
+            delBtn.onclick = () => deleteMaterial(m.id);
+            btnCell.appendChild(editBtn);
+            btnCell.appendChild(delBtn);
+        });
+    }
+
+    async function deleteMaterial(id) {
+        if (!confirm('确定删除？')) return;
+        const res = await fetch(`/api/materials/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.code === 0) {
+            alert('删除成功');
+            loadMaterials();
+            loadStats();
+            loadCategories();
+        } else {
+            alert('删除失败');
+        }
+    }
+
+    function editMaterial(m) {
+        const newKorean = prompt('韩语:', m.korean);
+        if (newKorean === null) return;
+        const newChinese = prompt('中文:', m.chinese);
+        if (newChinese === null) return;
+        const newCategory = prompt('分类:', m.category);
+        if (newCategory === null) return;
+        const updated = { ...m, korean: newKorean, chinese: newChinese, category: newCategory };
+        fetch(`/api/materials/${m.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updated)
+        }).then(res => res.json()).then(json => {
+            if (json.code === 0) {
+                alert('更新成功');
+                loadMaterials();
+                loadStats();
+                loadCategories();
+            } else {
+                alert('更新失败');
+            }
+        });
+    }
+
+    async function loadStats() {
+        const res = await fetch('/api/stats');
+        const json = await res.json();
+        if (json.code === 0) {
+            const stats = json.data;
+            let html = `<div class="stats-grid">
+                <div class="stat-card"><div class="stat-number">${stats.total}</div>总素材</div>
+                <div class="stat-card"><div class="stat-number">${stats.with_example_rate}%</div>含例句率</div>
+                <div class="stat-card"><div class="stat-number">${stats.difficulty.初级}</div>初级</div>
+                <div class="stat-card"><div class="stat-number">${stats.difficulty.中级}</div>中级</div>
+                <div class="stat-card"><div class="stat-number">${stats.difficulty.高级}</div>高级</div>
+            </div><div><strong>🏷️ 热门标签:</strong> `;
+            const topTags = Object.entries(stats.tags).sort((a,b)=>b[1]-a[1]).slice(0,5);
+            topTags.forEach(([tag, cnt]) => { html += `<span class="tag">${tag} (${cnt})</span>`; });
+            html += `</div>`;
+            document.getElementById('statsArea').innerHTML = html;
+        }
+    }
+
+    // 新增素材简易弹窗
+    document.getElementById('addMaterialBtn').onclick = () => {
+        const korean = prompt('韩语:');
+        if (!korean) return;
+        const chinese = prompt('中文:');
+        if (!chinese) return;
+        const category = prompt('分类 (日常问候/饮食料理等):', '日常问候');
+        if (!category) return;
+        const difficulty = prompt('难度 (初级/中级/高级):', '初级');
+        const example = prompt('例句 (可选):', '');
+        fetch('/api/materials', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ korean, chinese, category, difficulty, example, example_cn: '', tags: [] })
+        }).then(res => res.json()).then(json => {
+            if (json.code === 0) {
+                alert('添加成功');
+                loadMaterials();
+                loadStats();
+                loadCategories();
+            } else {
+                alert('添加失败: '+json.msg);
+            }
+        });
+    };
+
+    document.getElementById('exportBtn').onclick = () => {
+        window.open('/api/export', '_blank');
+    };
+    document.getElementById('importBtn').onclick = () => {
+        document.getElementById('importFile').click();
+    };
+    document.getElementById('importFile').onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('/api/import', { method: 'POST', body: formData });
+        const json = await res.json();
+        alert(json.msg);
+        loadMaterials();
+        loadStats();
+        loadCategories();
+        e.target.value = '';
+    };
+
+    document.getElementById('searchBtn').onclick = () => loadMaterials();
+    document.getElementById('filterCategory').onchange = () => loadMaterials();
+    document.getElementById('filterDifficulty').onchange = () => loadMaterials();
+
+    // 固定主题生成
+    document.getElementById('generateThemeBtn').onclick = async () => {
+        const theme = document.getElementById('themeSelect').value;
+        const title = document.getElementById('themeTitle').value;
+        const res = await fetch('/api/essay/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ theme, title, values: {} })
+        });
+        const json = await res.json();
+        const resultDiv = document.getElementById('themeResult');
+        if (json.code === 0) {
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<strong>📄 ${json.data.title}</strong><br>${json.data.essay.replace(/\n/g, '<br>')}<hr><small>使用素材数量: ${json.data.materials_count} | 分类: ${json.data.categories_used.join(', ')}</small>`;
+        } else {
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<span style="color:red">生成失败: ${json.msg}</span>`;
+        }
+    };
+
+    // 自定义生成 (支持本地/AI)
+    const modeSelect = document.getElementById('generateMode');
+    const aiKeyGroup = document.getElementById('aiKeyGroup');
+    modeSelect.addEventListener('change', () => {
+        if (modeSelect.value === 'ai') {
+            aiKeyGroup.style.display = 'block';
+        } else {
+            aiKeyGroup.style.display = 'none';
+        }
+    });
+    document.getElementById('generateCustomBtn').onclick = async () => {
+        const title = document.getElementById('customTitle').value.trim();
+        if (!title) {
+            alert('请输入标题');
+            return;
+        }
+        const keywordsRaw = document.getElementById('customKeywords').value;
+        const keywords = keywordsRaw.split(',').map(s=>s.trim()).filter(s=>s);
+        const useAI = (modeSelect.value === 'ai');
+        let apiKey = '';
+        if (useAI) {
+            apiKey = document.getElementById('apiKey').value.trim();
+            if (!apiKey && !confirm('未填写API Key，将尝试使用服务器环境变量。如果失败，请填写Key。是否继续？')) return;
+            if (!confirm(`本次将调用DeepSeek API，约消耗0.0015元。是否继续？`)) return;
+        }
+        const resultDiv = document.getElementById('customResult');
+        const costInfo = document.getElementById('costInfo');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '⏳ 生成中，请稍候...';
+        costInfo.innerHTML = '';
+        try {
+            const res = await fetch('/api/essay/custom', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, keywords, use_ai: useAI, api_key: apiKey })
+            });
+            const json = await res.json();
+            if (json.code === 0) {
+                const data = json.data;
+                let modeText = (data.mode === 'ai') ? '🤖 AI增强模式' : '📜 本地规则模式';
+                let costText = (data.mode === 'ai') ? `💰 预估费用: ¥${data.estimated_cost}` : '💰 免费';
+                resultDiv.innerHTML = `<strong>✨ 生成结果 (${modeText})</strong><br>${data.essay.replace(/\n/g, '<br>')}<hr><small>${data.note || ''}</small>`;
+                costInfo.innerHTML = costText;
+            } else {
+                resultDiv.innerHTML = `<span style="color:red">❌ 生成失败: ${json.msg}</span>`;
+            }
+        } catch (err) {
+            resultDiv.innerHTML = `<span style="color:red">网络错误: ${err.message}</span>`;
+        }
+    };
+    document.getElementById('clearCustomBtn').onclick = () => {
+        document.getElementById('customResult').style.display = 'none';
+        document.getElementById('customResult').innerHTML = '';
+        document.getElementById('costInfo').innerHTML = '';
+    };
+
+    // 初始加载所有
+    loadCategories();
+    loadThemes();
+    loadMaterials();
+    loadStats();
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+{
+  "materials": [
+    {
+      "korean": "안녕하세요",
+      "chinese": "你好",
+      "category": "日常问候",
+      "difficulty": "初级",
+      "example": "안녕하세요, 처음 뵙겠습니다.",
+      "example_cn": "你好，初次见面。",
+      "tags": [
+        "问候",
+        "正式"
+      ],
+      "id": 1,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "감사합니다",
+      "chinese": "谢谢",
+      "category": "日常问候",
+      "difficulty": "初级",
+      "example": "도와주셔서 정말 감사합니다.",
+      "example_cn": "非常感谢您的帮助。",
+      "tags": [
+        "感谢",
+        "礼貌"
+      ],
+      "id": 2,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "죄송합니다",
+      "chinese": "对不起",
+      "category": "日常问候",
+      "difficulty": "初级",
+      "example": "늦어서 죄송합니다.",
+      "example_cn": "对不起，我迟到了。",
+      "tags": [
+        "道歉"
+      ],
+      "id": 3,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "반갑습니다",
+      "chinese": "很高兴见到你",
+      "category": "日常问候",
+      "difficulty": "初级",
+      "example": "만나서 반갑습니다.",
+      "example_cn": "见到您很高兴。",
+      "tags": [
+        "问候"
+      ],
+      "id": 4,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "김치찌개",
+      "chinese": "泡菜汤",
+      "category": "饮食料理",
+      "difficulty": "中级",
+      "example": "김치찌개는 한국의 대표적인 음식입니다.",
+      "example_cn": "泡菜汤是韩国的代表性食物。",
+      "tags": [
+        "韩食",
+        "汤类"
+      ],
+      "id": 5,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "불고기",
+      "chinese": "烤肉",
+      "category": "饮食料理",
+      "difficulty": "初级",
+      "example": "불고기는 외국인들에게 인기가 많습니다.",
+      "example_cn": "烤肉很受外国人欢迎。",
+      "tags": [
+        "韩食",
+        "肉类"
+      ],
+      "id": 6,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "비빔밥",
+      "chinese": "拌饭",
+      "category": "饮食料理",
+      "difficulty": "初级",
+      "example": "비빔밥은 여러 가지 채소와 고추장을 넣어 비벼 먹는 음식입니다.",
+      "example_cn": "拌饭是放入各种蔬菜和辣椒酱拌着吃的食物。",
+      "tags": [
+        "韩食",
+        "主食"
+      ],
+      "id": 7,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "떡볶이",
+      "chinese": "炒年糕",
+      "category": "饮食料理",
+      "difficulty": "初级",
+      "example": "떡볶이는 한국의 대표적인 길거리 음식입니다.",
+      "example_cn": "炒年糕是韩国代表性的街头小吃。",
+      "tags": [
+        "韩食",
+        "小吃"
+      ],
+      "id": 8,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "버스",
+      "chinese": "公交车",
+      "category": "交通出行",
+      "difficulty": "初级",
+      "example": "학교까지 버스로 30분 걸립니다.",
+      "example_cn": "坐公交车到学校需要30分钟。",
+      "tags": [
+        "公共交通"
+      ],
+      "id": 9,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "지하철",
+      "chinese": "地铁",
+      "category": "交通出行",
+      "difficulty": "初级",
+      "example": "지하철이 버스보다 더 빠릅니다.",
+      "example_cn": "地铁比公交更快。",
+      "tags": [
+        "公共交通"
+      ],
+      "id": 10,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "택시",
+      "chinese": "出租车",
+      "category": "交通出行",
+      "difficulty": "初级",
+      "example": "늦을 때는 택시를 타고 갑니다.",
+      "example_cn": "迟到的时候坐出租车去。",
+      "tags": [
+        "交通方式"
+      ],
+      "id": 11,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "얼마예요",
+      "chinese": "多少钱",
+      "category": "购物消费",
+      "difficulty": "初级",
+      "example": "이 옷은 얼마예요?",
+      "example_cn": "这件衣服多少钱？",
+      "tags": [
+        "价格",
+        "问句"
+      ],
+      "id": 12,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "깎아 주세요",
+      "chinese": "请便宜点",
+      "category": "购物消费",
+      "difficulty": "初级",
+      "example": "조금만 깎아 주세요.",
+      "example_cn": "请便宜一点。",
+      "tags": [
+        "讲价"
+      ],
+      "id": 13,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "시험",
+      "chinese": "考试",
+      "category": "校园生活",
+      "difficulty": "初级",
+      "example": "다음 주에 중요한 시험이 있습니다.",
+      "example_cn": "下周有重要的考试。",
+      "tags": [
+        "学习"
+      ],
+      "id": 14,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "도서관",
+      "chinese": "图书馆",
+      "category": "校园生活",
+      "difficulty": "初级",
+      "example": "시험 기간에는 도서관에 사람이 많습니다.",
+      "example_cn": "考试期间图书馆人很多。",
+      "tags": [
+        "地点"
+      ],
+      "id": 15,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "날씨",
+      "chinese": "天气",
+      "category": "天气季节",
+      "difficulty": "初级",
+      "example": "오늘 날씨가 정말 좋습니다.",
+      "example_cn": "今天天气真好。",
+      "tags": [
+        "天气"
+      ],
+      "id": 16,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "봄",
+      "chinese": "春天",
+      "category": "天气季节",
+      "difficulty": "初级",
+      "example": "봄에는 꽃이 핍니다.",
+      "example_cn": "春天花会开。",
+      "tags": [
+        "季节"
+      ],
+      "id": 17,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "수영",
+      "chinese": "游泳",
+      "category": "兴趣爱好",
+      "difficulty": "初级",
+      "example": "여름에는 수영을 자주 합니다.",
+      "example_cn": "夏天经常游泳。",
+      "tags": [
+        "运动"
+      ],
+      "id": 18,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "음악 감상",
+      "chinese": "听音乐",
+      "category": "兴趣爱好",
+      "difficulty": "初级",
+      "example": "저는 K-POP을 자주 듣습니다.",
+      "example_cn": "我经常听K-POP。",
+      "tags": [
+        "音乐"
+      ],
+      "id": 19,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "여행",
+      "chinese": "旅行",
+      "category": "旅游观光",
+      "difficulty": "初级",
+      "example": "방학 때 제주도로 여행을 갈 거예요.",
+      "example_cn": "放假时要去济州岛旅行。",
+      "tags": [
+        "旅行"
+      ],
+      "id": 20,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "사진을 찍다",
+      "chinese": "拍照",
+      "category": "旅游观光",
+      "difficulty": "初级",
+      "example": "예쁜 풍경을 사진으로 남겼어요.",
+      "example_cn": "用照片记录下了美丽的风景。",
+      "tags": [
+        "摄影"
+      ],
+      "id": 21,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "가족",
+      "chinese": "家人",
+      "category": "家庭生活",
+      "difficulty": "初级",
+      "example": "우리 가족은 모두 4명입니다.",
+      "example_cn": "我家共有4口人。",
+      "tags": [
+        "家庭"
+      ],
+      "id": 22,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "운동",
+      "chinese": "运动",
+      "category": "健康医疗",
+      "difficulty": "初级",
+      "example": "건강을 위해 매일 운동을 합니다.",
+      "example_cn": "为了健康每天运动。",
+      "tags": [
+        "健康",
+        "运动"
+      ],
+      "id": 23,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "사랑해요",
+      "chinese": "我爱你",
+      "category": "情感表达",
+      "difficulty": "初级",
+      "example": "엄마, 사랑해요!",
+      "example_cn": "妈妈，我爱你！",
+      "tags": [
+        "感情",
+        "表达"
+      ],
+      "id": 24,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "회의",
+      "chinese": "会议",
+      "category": "职场工作",
+      "difficulty": "中级",
+      "example": "오후 2시에 회의가 있습니다.",
+      "example_cn": "下午2点有会议。",
+      "tags": [
+        "工作"
+      ],
+      "id": 25,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "여름",
+      "chinese": "夏天",
+      "category": "天气季节",
+      "difficulty": "初级",
+      "example": "한국의 여름은 덥고 습합니다.",
+      "example_cn": "韩国的夏天又热又潮。",
+      "tags": [
+        "季节"
+      ],
+      "id": 26,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "한국어",
+      "chinese": "韩语",
+      "category": "校园生活",
+      "difficulty": "初级",
+      "example": "저는 한국어를 열심히 공부하고 있습니다.",
+      "example_cn": "我正在努力学习韩语。",
+      "tags": [
+        "语言",
+        "学习"
+      ],
+      "id": 27,
+      "created_at": "2026-06-03 23:37:32"
+    },
+    {
+      "korean": "친구",
+      "chinese": "朋友",
+      "category": "日常问候",
+      "difficulty": "初级",
+      "example": "한국 친구를 사귀고 싶습니다.",
+      "example_cn": "想交韩国朋友。",
+      "tags": [
+        "社交"
+      ],
+      "id": 28,
+      "created_at": "2026-06-03 23:37:32"
+    }
+  ],
+  "next_id": 29
+}
