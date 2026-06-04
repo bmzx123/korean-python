@@ -303,6 +303,86 @@
             margin-top: 4px;
         }
 
+        /* 素材卡片样式 (用于场景分类) */
+        .material-card {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: 0.2s;
+            border: 1px solid #eef2f6;
+        }
+        .material-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .material-card .korean {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2a5298;
+            margin-bottom: 8px;
+        }
+        .material-card .chinese {
+            font-size: 0.9rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .material-card .example {
+            font-size: 0.85rem;
+            color: #5a6e7c;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+        .material-card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .material-card .tag {
+            background: #eef2ff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #2a5298;
+        }
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .category-buttons button {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .category-buttons button.active {
+            background: #2a5298;
+            color: white;
+        }
+        .material-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .result-area {
+            background: #fef9e6;
+            border-left: 4px solid #f1c40f;
+            padding: 15px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            line-height: 1.5;
+            max-height: 500px;
+            overflow-y: auto;
+        }
         @media (max-width: 768px) {
             .sidebar { width: 80px; }
             .sidebar-header h2, .sidebar-header p, .nav-link span:not(.icon) { display: none; }
@@ -326,6 +406,11 @@
             <li class="nav-item"><a class="nav-link" data-page="essay"><i>✍️</i> <span>作文生成</span></a></li>
             <li class="nav-item"><a class="nav-link" data-page="data"><i>⚙️</i> <span>数据管理</span></a></li>
         </ul>
+        <div style="position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; font-size: 0.7rem; opacity: 0.6;">
+            <div id="userStatus">未登录</div>
+            <button id="loginBtn" style="background: none; border:1px solid white; margin-top:8px; padding:4px 12px;">登录/注册</button>
+            <button id="logoutBtn" style="background: none; border:1px solid white; margin-top:8px; padding:4px 12px; display:none;">退出</button>
+        </div>
     </div>
 
     <!-- 右侧内容区 -->
@@ -350,11 +435,14 @@
             </div>
         </div>
 
-        <!-- 页面2：场景分类 -->
+        <!-- 页面2：场景分类（增强版：分类按钮 + 素材卡片） -->
         <div id="page-categories" class="page">
             <div class="card">
-                <div class="card-title">🏷️ 场景分类</div>
-                <div id="categoriesContainer" class="category-grid">加载中...</div>
+                <div class="card-title">📂 场景分类</div>
+                <div id="categoryButtons" class="category-buttons"></div>
+                <div id="selectedCategoryTitle" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 16px; display: none;"></div>
+                <div id="materialCardsContainer" class="material-cards-grid"></div>
+                <div id="noMaterialsMsg" style="display: none; text-align: center; padding: 40px; color: #7f8c8d;">该分类暂无素材，请先添加～</div>
             </div>
         </div>
 
@@ -366,7 +454,7 @@
             </div>
         </div>
 
-        <!-- 页面4：作文生成（自定义主题） -->
+        <!-- 页面4：作文生成 -->
         <div id="page-essay" class="page">
             <div class="card">
                 <div class="card-title">✨ 自定义主题作文生成</div>
@@ -398,7 +486,22 @@
     </div>
 </div>
 
-<!-- 添加/编辑素材模态框 -->
+<!-- 登录/注册模态框 -->
+<div id="authModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><span id="authModalTitle">登录</span><span class="close-modal">&times;</span></div>
+        <form id="authForm">
+            <div class="form-group"><label>用户名</label><input id="authUsername" required></div>
+            <div class="form-group"><label>密码</label><input type="password" id="authPassword" required></div>
+            <div style="display: flex; gap:12px; justify-content: space-between; margin-top:20px;">
+                <button type="button" id="switchAuthBtn">去注册</button>
+                <button type="submit" id="authSubmitBtn">登录</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 素材编辑模态框 -->
 <div id="materialModal" class="modal">
     <div class="modal-content">
         <div class="modal-header"><span id="modalTitle">新增素材</span><span class="close-modal">&times;</span></div>
@@ -419,55 +522,135 @@
     </div>
 </div>
 
-<style>
-    .result-area {
-        background: #fef9e6;
-        border-left: 4px solid #f1c40f;
-        padding: 15px;
-        border-radius: 12px;
-        white-space: pre-wrap;
-        font-family: monospace;
-        line-height: 1.5;
-        max-height: 500px;
-        overflow-y: auto;
-    }
-</style>
-
 <script>
-    // ---------- 全局变量 ----------
+    // ==================== 全局变量与辅助函数 ====================
     let currentMaterials = [];
     let allCategories = [];
+    let currentUser = null;
 
-    // ---------- 辅助函数 ----------
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
     async function apiFetch(url, options={}) {
         const res = await fetch(url, options);
         return res.json();
     }
 
-    // 加载分类列表（用于筛选下拉和场景分类页）
-    async function loadCategories() {
-        const json = await apiFetch('/api/categories');
+    // 检查登录状态
+    async function checkAuth() {
+        const res = await fetch('/api/current_user');
+        const json = await res.json();
         if (json.code === 0) {
-            allCategories = json.data;
-            // 更新筛选下拉
-            const catSelect = document.getElementById('filterCategory');
-            catSelect.innerHTML = '<option value="">全部分类</option>';
-            json.data.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat.name;
-                opt.textContent = `${cat.name} (${cat.count})`;
-                catSelect.appendChild(opt);
-            });
-            // 更新场景分类页面
-            const container = document.getElementById('categoriesContainer');
-            if (container) {
-                container.innerHTML = json.data.map(cat => `<div class="category-card">${cat.name}<span class="category-count">${cat.count}</span></div>`).join('');
-            }
+            currentUser = json.username;
+            document.getElementById('userStatus').innerText = `👤 ${currentUser}`;
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            return true;
+        } else {
+            currentUser = null;
+            document.getElementById('userStatus').innerText = '未登录';
+            document.getElementById('loginBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            return false;
         }
     }
 
-    // 加载素材表格
+    // 登录/注册模态框逻辑
+    let authMode = 'login'; // 'login' or 'register'
+    const authModal = document.getElementById('authModal');
+    const authModalTitle = document.getElementById('authModalTitle');
+    const authSubmitBtn = document.getElementById('authSubmitBtn');
+    const switchAuthBtn = document.getElementById('switchAuthBtn');
+    const authForm = document.getElementById('authForm');
+
+    document.getElementById('loginBtn').onclick = () => {
+        authMode = 'login';
+        authModalTitle.innerText = '登录';
+        authSubmitBtn.innerText = '登录';
+        switchAuthBtn.innerText = '去注册';
+        authModal.style.display = 'flex';
+    };
+    switchAuthBtn.onclick = () => {
+        if (authMode === 'login') {
+            authMode = 'register';
+            authModalTitle.innerText = '注册';
+            authSubmitBtn.innerText = '注册';
+            switchAuthBtn.innerText = '去登录';
+        } else {
+            authMode = 'login';
+            authModalTitle.innerText = '登录';
+            authSubmitBtn.innerText = '登录';
+            switchAuthBtn.innerText = '去注册';
+        }
+    };
+    authForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('authUsername').value.trim();
+        const password = document.getElementById('authPassword').value.trim();
+        if (!username || !password) {
+            alert('用户名和密码不能为空');
+            return;
+        }
+        const endpoint = authMode === 'login' ? '/api/login' : '/api/register';
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({username, password})
+        });
+        const json = await res.json();
+        if (json.code === 0) {
+            alert(json.msg);
+            authModal.style.display = 'none';
+            if (authMode === 'login') {
+                checkAuth();
+                loadMaterials();
+                loadStats();
+                loadCategoryButtons();
+            } else {
+                // 注册后自动切换到登录模式
+                authMode = 'login';
+                authModalTitle.innerText = '登录';
+                authSubmitBtn.innerText = '登录';
+                switchAuthBtn.innerText = '去注册';
+                document.getElementById('authUsername').value = '';
+                document.getElementById('authPassword').value = '';
+            }
+        } else {
+            alert(json.msg);
+        }
+    };
+    document.getElementById('logoutBtn').onclick = async () => {
+        await fetch('/api/logout', {method: 'POST'});
+        checkAuth();
+        // 清空页面数据
+        document.querySelector('#materialsTable tbody').innerHTML = '';
+        document.getElementById('statsArea').innerHTML = '';
+        document.getElementById('materialCardsContainer').innerHTML = '';
+        document.getElementById('categoryButtons').innerHTML = '';
+        alert('已退出');
+        window.location.reload(); // 简单刷新
+    };
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.onclick = () => {
+            document.getElementById('materialModal').style.display = 'none';
+            document.getElementById('authModal').style.display = 'none';
+        };
+    });
+    window.onclick = (e) => {
+        if (e.target === document.getElementById('materialModal')) document.getElementById('materialModal').style.display = 'none';
+        if (e.target === document.getElementById('authModal')) document.getElementById('authModal').style.display = 'none';
+    };
+
+    // ==================== 素材管理 ====================
     async function loadMaterials() {
+        if (!currentUser) return;
         const category = document.getElementById('filterCategory').value;
         const difficulty = document.getElementById('filterDifficulty').value;
         const search = document.getElementById('searchInput').value;
@@ -515,10 +698,10 @@
             loadMaterials();
             loadStats();
             loadCategories();
+            if (document.querySelector('#page-categories').classList.contains('active-page')) loadCategoryButtons();
         } else alert('删除失败');
     }
 
-    // 打开新增模态框
     function openAddModal() {
         document.getElementById('modalTitle').innerText = '新增素材';
         document.getElementById('editId').value = '';
@@ -545,7 +728,6 @@
         document.getElementById('materialModal').style.display = 'flex';
     }
 
-    // 保存素材（新增或更新）
     document.getElementById('materialForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('editId').value;
@@ -575,18 +757,93 @@
             document.getElementById('materialModal').style.display = 'none';
             loadMaterials();
             loadStats();
-            loadCategories();
+            if (document.querySelector('#page-categories').classList.contains('active-page')) {
+                loadCategoryButtons(); // 刷新分类按钮及当前卡片
+            }
         } else {
             alert('操作失败: '+json.msg);
         }
     });
-
-    // 关闭模态框
-    document.querySelector('.close-modal').onclick = () => document.getElementById('materialModal').style.display = 'none';
     document.getElementById('cancelModalBtn').onclick = () => document.getElementById('materialModal').style.display = 'none';
 
-    // 统计页面
+    // ==================== 场景分类（卡片展示） ====================
+    let currentCategory = null;
+    async function loadCategoryButtons() {
+        if (!currentUser) return;
+        const res = await fetch('/api/categories');
+        const json = await res.json();
+        if (json.code === 0) {
+            const categories = json.data;
+            const container = document.getElementById('categoryButtons');
+            container.innerHTML = '';
+            if (categories.length === 0) {
+                container.innerHTML = '<span>暂无分类，请先添加素材</span>';
+                return;
+            }
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.textContent = `${cat.name} (${cat.count})`;
+                btn.dataset.category = cat.name;
+                btn.onclick = () => {
+                    document.querySelectorAll('#categoryButtons button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = cat.name;
+                    loadCategoryMaterials(cat.name);
+                };
+                container.appendChild(btn);
+            });
+            // 默认选中第一个
+            const firstBtn = container.querySelector('button');
+            if (firstBtn) {
+                firstBtn.classList.add('active');
+                currentCategory = categories[0].name;
+                loadCategoryMaterials(categories[0].name);
+            }
+        }
+    }
+
+    async function loadCategoryMaterials(categoryName) {
+        const container = document.getElementById('materialCardsContainer');
+        const titleDiv = document.getElementById('selectedCategoryTitle');
+        const noMsgDiv = document.getElementById('noMaterialsMsg');
+        titleDiv.style.display = 'block';
+        titleDiv.textContent = `📖 ${categoryName}`;
+        container.innerHTML = '<div style="grid-column:1/-1; text-align:center;">加载中...</div>';
+        try {
+            const res = await fetch(`/api/materials?category=${encodeURIComponent(categoryName)}`);
+            const json = await res.json();
+            if (json.code === 0 && json.data.length > 0) {
+                noMsgDiv.style.display = 'none';
+                renderMaterialCards(json.data);
+            } else {
+                noMsgDiv.style.display = 'block';
+                container.innerHTML = '';
+            }
+        } catch (err) {
+            container.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:red;">加载失败</div>';
+        }
+    }
+
+    function renderMaterialCards(materials) {
+        const container = document.getElementById('materialCardsContainer');
+        container.innerHTML = '';
+        materials.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'material-card';
+            card.innerHTML = `
+                <div class="korean">${escapeHtml(m.korean)}</div>
+                <div class="chinese">${escapeHtml(m.chinese)}</div>
+                ${m.example ? `<div class="example">📖 ${escapeHtml(m.example)}</div>` : ''}
+                <div class="tags">${(m.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+                <div style="margin-top: 12px; font-size:0.75rem; color:#94a3b8;">难度: ${m.difficulty || '初级'}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // ==================== 统计 ====================
     async function loadStats() {
+        if (!currentUser) return;
         const json = await apiFetch('/api/stats');
         if (json.code === 0) {
             const s = json.data;
@@ -601,32 +858,7 @@
         }
     }
 
-    // 重置数据
-    async function resetData() {
-        if (!confirm('⚠️ 重置将清空所有素材并恢复示例数据，不可撤销！确定吗？')) return;
-        // 先调用重置示例数据的接口（后端需要支持？目前没有，但我们可以直接调用初始化逻辑：先删除所有再重新初始化。简便方法：前端调用删除所有再重新添加？不现实。需要后端增加重置接口）
-        // 由于app.py没有重置API，但可以在前端手动调用一个自建接口？为简便，提供一个后端重置API的调用。我们将在前端模拟：调用export无意义。最好增加一个后端路由。
-        // 用户已有init_sample_data函数，但不会覆盖已有数据，需要强制重置。为满足需求，在app.py中增加一个/api/reset接口。
-        // 但为了用户立即能用，我先给出前端警告，建议后端增加接口。实际上，用户可以在数据管理页自行导出后再手动清空再导入示例json。
-        // 更务实的做法：前端引导用户自己用“导入JSON”恢复示例文件。为了体验，我在后端预设一个reset接口，下面会添加。
-        // 由于无法改动后端？用户可后续添加。先告知用户需添加后端路由。但我们可以直接在app.py里加上一个简单的reset路由。
-        // 为了不修改后端代码，我暂时模拟：让用户自己导入示例数据包。但为了功能完整，我将在后端增加reset API。
-        // 由于用户有app.py源码，稍后将提供追加reset路由的代码。现在前端先调用fetch('/api/reset')。
-        try {
-            const res = await fetch('/api/reset', { method: 'POST' });
-            const json = await res.json();
-            alert(json.msg);
-            if (json.code === 0) {
-                loadMaterials();
-                loadStats();
-                loadCategories();
-            }
-        } catch(e) {
-            alert('重置失败，请确保后端已添加 /api/reset 接口');
-        }
-    }
-
-    // 导出
+    // ==================== 数据导入导出 & 重置 ====================
     document.getElementById('exportBtn').onclick = () => window.open('/api/export', '_blank');
     document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
     document.getElementById('importFile').onchange = async (e) => {
@@ -639,16 +871,20 @@
         alert(json.msg);
         loadMaterials();
         loadStats();
-        loadCategories();
+        if (document.querySelector('#page-categories').classList.contains('active-page')) loadCategoryButtons();
         e.target.value = '';
     };
-    document.getElementById('resetDataBtn') && (document.getElementById('resetDataBtn').onclick = resetData);
-    document.getElementById('searchBtn').onclick = () => loadMaterials();
-    document.getElementById('filterCategory').onchange = () => loadMaterials();
-    document.getElementById('filterDifficulty').onchange = () => loadMaterials();
-    document.getElementById('addMaterialBtn').onclick = openAddModal;
+    document.getElementById('resetDataBtn').onclick = async () => {
+        if (!confirm('重置将清空所有素材并恢复示例数据，不可撤销！确定吗？')) return;
+        const res = await fetch('/api/reset', { method: 'POST' });
+        const json = await res.json();
+        alert(json.msg);
+        loadMaterials();
+        loadStats();
+        if (document.querySelector('#page-categories').classList.contains('active-page')) loadCategoryButtons();
+    };
 
-    // 作文生成逻辑（保留原有自定义功能）
+    // ==================== 作文生成 ====================
     const modeSelect = document.getElementById('generateMode');
     const aiKeyGroup = document.getElementById('aiKeyGroup');
     modeSelect.addEventListener('change', () => {
@@ -691,14 +927,13 @@
         }
     };
 
-    // 页面切换
+    // ==================== 页面切换 ====================
     function switchPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(`page-${pageId}`).classList.add('active-page');
         document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
         document.querySelector(`.nav-link[data-page="${pageId}"]`).classList.add('active');
-        // 每次切换时刷新相关数据
-        if (pageId === 'categories') loadCategories();
+        if (pageId === 'categories') loadCategoryButtons();
         if (pageId === 'stats') loadStats();
         if (pageId === 'materials') loadMaterials();
     }
@@ -711,11 +946,42 @@
         });
     });
 
-    // 默认激活素材管理
-    switchPage('materials');
-    loadCategories();
-    loadStats();
-    loadMaterials();
+    // ==================== 筛选监听 ====================
+    document.getElementById('searchBtn').onclick = () => loadMaterials();
+    document.getElementById('filterCategory').onchange = () => loadMaterials();
+    document.getElementById('filterDifficulty').onchange = () => loadMaterials();
+    document.getElementById('addMaterialBtn').onclick = openAddModal;
+
+    // ==================== 初始化 ====================
+    async function init() {
+        await checkAuth();
+        if (currentUser) {
+            loadCategoriesForFilter(); // 加载分类下拉
+            loadMaterials();
+            loadStats();
+            loadCategoryButtons();
+            switchPage('materials');
+        } else {
+            // 未登录时显示登录模态框
+            authModal.style.display = 'flex';
+        }
+    }
+
+    async function loadCategoriesForFilter() {
+        const json = await apiFetch('/api/categories');
+        if (json.code === 0) {
+            const catSelect = document.getElementById('filterCategory');
+            catSelect.innerHTML = '<option value="">全部分类</option>';
+            json.data.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.name;
+                opt.textContent = `${cat.name} (${cat.count})`;
+                catSelect.appendChild(opt);
+            });
+        }
+    }
+
+    init();
 </script>
 </body>
 </html>
